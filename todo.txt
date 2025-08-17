@@ -1,0 +1,5 @@
+ Things I need to implement:
+
+ 1. Put the board in the middle
+ 2. Implement Flag function
+ 3. Implement Mine function
