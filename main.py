@@ -5,12 +5,15 @@ from my_module import Button
 # pygame setup
 pygame.font.init()
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((700, 700))
 clock = pygame.time.Clock()
 running = True
 dt = 0
 
-mine_matrix = [[Button(40*i,40*j, 30,30, "") for j in range(10)] for i in range(10)]
+board_width = 16
+board_height = 16
+
+mine_matrix = [[Button(40*i,40*j, 30,30, "") for j in range(board_width)] for i in range(board_height)]
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 while running:
@@ -21,24 +24,11 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("blue")
+    screen.fill("gray")
     for row in mine_matrix:
         for mine in row:
             mine.draw(screen)
 
-
-
-    pygame.draw.circle(screen, "red", player_pos, 40)
-    mine_matrix
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
 
     # flip() the display to put your work on screen
     pygame.display.flip()
