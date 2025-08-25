@@ -1,5 +1,6 @@
 # Example file showing a circle moving on screen
 import pygame
+from random import randint
 from my_module import Button
 
 
@@ -20,11 +21,27 @@ dt = 0
 board_width = 16
 board_height = 16
 
-is_bomb = True # Needs to be random with a certain number of bombs (e.g 40)
-mine_matrix = [[Button(40*i,40*j, 32,32, is_bomb) for j in range(board_width)] for i in range(board_height)]
+is_bomb = True # Needs to be random with a certain number of bombs (e.)
+mine_matrix = [[Button(40*i,40*j, 32,32) for j in range(board_width)] for i in range(board_height)]
+# example:
+# [
+#   [0, 0, 0]
+#   [0, 0, 0]
+#   [0, 0, 0]
+# ]
 
+# plant select number of bumbs randomly
+number_ofBombs = 40
+i = 0
+while i < number_ofBombs:
+    x = randint(0, board_width-1)
+    y = randint(0, board_height-1)
 
+    selected_cell = mine_matrix[y][x]
 
+    if not selected_cell.get_bomb():
+        selected_cell.set_bomb()
+        i += 1
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 while running:
@@ -45,6 +62,7 @@ while running:
         for mine in row:
             mine.draw(screen)
             mine.handle_event(event)
+
 
     # flip() the display to put your work on screen
     pygame.display.flip()

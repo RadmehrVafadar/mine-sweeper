@@ -1,7 +1,7 @@
 import pygame
 
 class Button:
-    def __init__(self, x, y, width, height, is_bomb):
+    def __init__(self, x, y, width, height):
         self.rect = pygame.Rect(x, y, width, height)
         
         # store all states
@@ -18,7 +18,7 @@ class Button:
         self.clicked = False
 
         # is bomb or not
-        self.is_bomb = is_bomb
+        self.is_bomb = False
 
     def draw(self, screen):
         mouse_pos = pygame.mouse.get_pos()
@@ -35,14 +35,23 @@ class Button:
 
 
     def handle_event(self, event):
-        
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
-                self.current_image = self.image_flag
-                self.clicked = True
+                if self.is_bomb:
+                    self.current_image = self.image_bomb
+                    print("BOOM!")
+                else:
+                    self.current_image = self.image_flag
+                    self.clicked = True
+                
                 return True
         return False
 
     def tool_button(self, event):
         self.current_image = self.image_bomb
 
+    def get_bomb(self):
+        return self.is_bomb
+    
+    def set_bomb(self):
+        self.is_bomb = True
