@@ -17,6 +17,9 @@ running = True
 dt = 0
 
 
+
+# Tool selection button
+tool_switch = Button(650, 650, 32, 32)
 # mine board setup
 board_width = 16
 board_height = 16
@@ -34,8 +37,8 @@ mine_matrix = [[Button(40*i,40*j, 32,32) for j in range(board_width)] for i in r
 number_ofBombs = 40
 i = 0
 while i < number_ofBombs:
-    x = randint(0, board_width-1)
-    y = randint(0, board_height-1)
+    x = randint(0, board_width - 1)
+    y = randint(0, board_height - 1)
 
     selected_cell = mine_matrix[y][x]
 
@@ -54,6 +57,9 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("gray")
 
+
+    tool_switch.draw(screen)
+    tool_switch.tool_button(event)
 
 
 
