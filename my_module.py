@@ -1,7 +1,7 @@
 import pygame
 
 class Button:
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, text='D', text_color=(255,255,255)):
         self.rect = pygame.Rect(x, y, width, height)
         
         # store all states
@@ -15,30 +15,48 @@ class Button:
         self.current_image = self.image_normal
 
 
+        # initialise box text
+        self.text = text
+        self.text_color = text_color
+        self.font = pygame.font.SysFont("Arial", 20)
+
         # keep track of whether it’s clicked
         self.clicked = False
 
         # is bomb or not
         self.is_bomb = False
+        self.display_number = False # by default we will not display numbers and only do so when clicked
+
 
     def draw(self, screen):
         mouse_pos = pygame.mouse.get_pos()
 
         # update hover state
-        if self.rect.collidepoint(mouse_pos) and not self.clicked:
+        if self.rect.collidepoint(mouse_pos) and not self.clicked and not self.display_number:
            self.current_image = self.image_hover
-        elif not self.clicked:
+
+        elif not self.clicked and not self.display_number:
             self.current_image = self.image_normal
 
-        # draw current image
+        if self.display_number:
+            text_surface = self.font.render(self.text, True, self.text_color)
+            text_rect = text_surface.get_rect(center=self.rect.center)
+
+
+            self.current_image = text_surface
+
         screen.blit(self.current_image, (self.rect.x, self.rect.y))
 
-    def handle_event(self, event):
+    def handle_event(self, event, is_tool_bomb=True):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
-                if self.is_bomb:
-                    self.current_image = self.image_bomb
-                    self.clicked = True
+                if is_tool_bomb:
+                    if self.is_bomb:
+                        self.current_image = self.image_bomb
+                        self.clicked = True
+                    else:
+                        self.display_number = True
+                        self.clicked = True
                 else:
                     self.current_image = self.image_flag
                     self.clicked = True
@@ -87,8 +105,14 @@ class ToggleButton:
                 else:
                     self.current_image = self.image_bomb
                     self.is_tool_bomb = True
+                print(self.is_tool_bomb)
                 return True
         return False
+
+
+    # getter functions
+    def get_is_tool_bomb(self):
+        return self.is_tool_bomb
 
 
 

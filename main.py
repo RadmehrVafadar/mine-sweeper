@@ -61,7 +61,7 @@ while running:
         for row in mine_matrix:
             for mine in row:
                 mine.handle_event(event)
-    
+
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("gray")
