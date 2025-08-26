@@ -2,7 +2,7 @@
 import pygame
 from random import randint
 from my_module import Button
-
+from my_module import ToggleButton
 
 # pygame setup
 window_width = 700
@@ -19,12 +19,11 @@ dt = 0
 
 
 # Tool selection button
-tool_switch = Button(650, 650, 32, 32)
+tool_switch = ToggleButton(650, 650, 32, 32)
 # mine board setup
 board_width = 16
 board_height = 16
 
-is_bomb = True # Needs to be random with a certain number of bombs (e.)
 mine_matrix = [[Button(40*i,40*j, 32,32) for j in range(board_width)] for i in range(board_height)]
 # example:
 # [
@@ -47,6 +46,9 @@ while i < number_ofBombs:
         i += 1
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+
+
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -54,20 +56,23 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        # check event changes
+        tool_switch.tool_button(event)
+        for row in mine_matrix:
+            for mine in row:
+                mine.handle_event(event)
+    
+
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("gray")
 
-
-    tool_switch.draw(screen)
-    tool_switch.tool_button(event)
-
-
-
     # display the button elements in the screen
+    tool_switch.draw(screen)
     for row in mine_matrix:
         for mine in row:
             mine.draw(screen)
-            mine.handle_event(event)
+
+
 
 
     # flip() the display to put your work on screen
