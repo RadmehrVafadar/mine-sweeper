@@ -1,7 +1,7 @@
 import pygame
 
 class Button:
-    def __init__(self, x, y, width, height, text='0', text_color=(255,255,255)):
+    def __init__(self, x, y, width, height, text='', text_color=(255,255,255)):
         self.rect = pygame.Rect(x, y, width, height)
         
         # store all states
@@ -80,7 +80,25 @@ class Button:
         self.is_bomb = True
 
     def set_text(self, text):
-        self.text = text
+        self.text = str(text)
+
+        match text:
+            case 1:
+                self.text_color = (0, 128, 225) # Light Blue
+            case 2:
+                self.text_color = "Green"
+            case 3:
+                self.text_color = "Red"
+            case 4:
+                self.text_color = (0,0,153) # Dark blue
+            case 5:
+                self.text_color = (225, 0, 225) # Hot Pink
+            case 6:
+                self.text_color = "Orange"
+            case 7:
+                self.text_color = "Yellow"
+            case _:
+                self.text_color = (204, 0, 204) # Dark Pink
 
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------

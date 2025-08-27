@@ -54,7 +54,6 @@ for y in range(board_height):
     for x in range(board_width):
         cell = mine_matrix[y][x]
         if not cell.get_bomb():
-
             bomb_count = 0
 
 
@@ -73,15 +72,7 @@ for y in range(board_height):
                     if mine_matrix[neighbor_row][neighbor_col].get_bomb():
                         bomb_count += 1
         if bomb_count > 0:
-            cell.set_text(str(bomb_count))
-
-
-
-
-
-
-
-
+            cell.set_text(bomb_count)
 
 while running:
     # poll for events
