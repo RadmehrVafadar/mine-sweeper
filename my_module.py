@@ -1,7 +1,7 @@
 import pygame
 
 class Button:
-    def __init__(self, x, y, width, height, text='D', text_color=(255,255,255)):
+    def __init__(self, x, y, width, height, text='0', text_color=(255,255,255)):
         self.rect = pygame.Rect(x, y, width, height)
         
         # store all states
@@ -26,11 +26,11 @@ class Button:
         # is bomb or not
         self.is_bomb = False
         self.display_number = False # by default we will not display numbers and only do so when clicked
-
+        self.is_land_flagged = False
 
     def draw(self, screen):
         mouse_pos = pygame.mouse.get_pos()
-
+        text_rect = (self.rect.x, self.rect.y)
         # update hover state
         if self.rect.collidepoint(mouse_pos) and not self.clicked and not self.display_number:
            self.current_image = self.image_hover
@@ -45,22 +45,28 @@ class Button:
 
             self.current_image = text_surface
 
-        screen.blit(self.current_image, (self.rect.x, self.rect.y))
+        screen.blit(self.current_image, text_rect)
 
     def handle_event(self, event, is_tool_bomb=True):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
-                if is_tool_bomb:
+                if is_tool_bomb and not self.is_land_flagged:
                     if self.is_bomb:
                         self.current_image = self.image_bomb
+                        # Add a gamer over state chacker here
                         self.clicked = True
                     else:
                         self.display_number = True
                         self.clicked = True
                 else:
-                    self.current_image = self.image_flag
-                    self.clicked = True
-                
+                    if self.is_land_flagged and not is_tool_bomb:
+                        self.current_image = self.image_normal
+                        self.is_land_flagged = False
+                        self.clicked = True
+                    else:
+                        self.current_image = self.image_flag
+                        self.is_land_flagged = True
+                        self.clicked = True
                 return True
         return False
 
@@ -96,7 +102,7 @@ class ToggleButton:
     def draw(self, screen):
         screen.blit(self.current_image, (self.rect.x, self.rect.y))
 
-    def tool_button(self, event):
+    def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:  # change here
             if self.rect.collidepoint(event.pos):
                 if self.current_image == self.image_bomb:
@@ -105,7 +111,6 @@ class ToggleButton:
                 else:
                     self.current_image = self.image_bomb
                     self.is_tool_bomb = True
-                print(self.is_tool_bomb)
                 return True
         return False
 
@@ -113,18 +118,4 @@ class ToggleButton:
     # getter functions
     def get_is_tool_bomb(self):
         return self.is_tool_bomb
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

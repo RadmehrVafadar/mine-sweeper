@@ -19,7 +19,7 @@ dt = 0
 
 
 # Tool selection button
-tool_switch = ToggleButton(650, 650, 32, 32)
+toolButton = ToggleButton(650, 650, 32, 32)
 # mine board setup
 board_width = 16
 board_height = 16
@@ -57,17 +57,19 @@ while running:
             running = False
 
         # check event changes
-        tool_switch.tool_button(event)
+        toolButton.handle_event(event)
+        current_tool_is_bomb = toolButton.get_is_tool_bomb()
         for row in mine_matrix:
             for mine in row:
-                mine.handle_event(event)
+                mine.handle_event(event, current_tool_is_bomb)
 
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("gray")
 
     # display the button elements in the screen
-    tool_switch.draw(screen)
+    toolButton.draw(screen)
+
     for row in mine_matrix:
         for mine in row:
             mine.draw(screen)
