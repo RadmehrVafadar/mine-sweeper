@@ -49,6 +49,40 @@ player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
 
 
+# checks the number of bombs place around each cell in 3x3 area and assigns the result to the cell
+for y in range(board_height):
+    for x in range(board_width):
+        cell = mine_matrix[y][x]
+        if not cell.get_bomb():
+
+            bomb_count = 0
+
+
+        for r_offset in range(-1, 2):
+            for c_offset in range(-1, 2):
+
+                if r_offset == 0 and c_offset == 0:
+                    continue
+
+
+                neighbor_row = y + r_offset
+                neighbor_col = x  + c_offset
+
+
+                if 0 <= neighbor_row < board_height and 0 <= neighbor_col < board_width:
+                    if mine_matrix[neighbor_row][neighbor_col].get_bomb():
+                        bomb_count += 1
+        if bomb_count > 0:
+            cell.set_text(str(bomb_count))
+
+
+
+
+
+
+
+
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -73,9 +107,6 @@ while running:
     for row in mine_matrix:
         for mine in row:
             mine.draw(screen)
-
-
-
 
     # flip() the display to put your work on screen
     pygame.display.flip()
