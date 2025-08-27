@@ -9,7 +9,7 @@ class Button:
         self.image_hover = pygame.image.load('./source/land_bright.png').convert_alpha()
         self.image_flag = pygame.image.load('./source/land_with_flag.png').convert_alpha()
         self.image_bomb = pygame.image.load('./source/land_with_bomb-V2.png').convert_alpha()
-
+        self.image_empty = pygame.image.load('./source/land_empty-V2.png').convert_alpha()
 
         # start with normal image
         self.current_image = self.image_normal
@@ -30,7 +30,10 @@ class Button:
 
     def draw(self, screen):
         mouse_pos = pygame.mouse.get_pos()
-        text_rect = (self.rect.x, self.rect.y)
+        
+        if self.display_number:
+            self.current_image = self.image_empty
+
         # update hover state
         if self.rect.collidepoint(mouse_pos) and not self.clicked and not self.display_number:
            self.current_image = self.image_hover
@@ -38,14 +41,14 @@ class Button:
         elif not self.clicked and not self.display_number:
             self.current_image = self.image_normal
 
+        screen.blit(self.current_image, (self.rect.x, self.rect.y))
+
+
         if self.display_number:
             text_surface = self.font.render(self.text, True, self.text_color)
             text_rect = text_surface.get_rect(center=self.rect.center)
+            screen.blit(text_surface, text_rect)
 
-
-            self.current_image = text_surface
-
-        screen.blit(self.current_image, text_rect)
 
     def handle_event(self, event, is_tool_bomb=True):
         if event.type == pygame.MOUSEBUTTONDOWN:

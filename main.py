@@ -56,7 +56,6 @@ for y in range(board_height):
         if not cell.get_bomb():
             bomb_count = 0
 
-
         for r_offset in range(-1, 2):
             for c_offset in range(-1, 2):
 
