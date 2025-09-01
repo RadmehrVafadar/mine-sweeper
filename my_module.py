@@ -50,17 +50,29 @@ class Button:
             screen.blit(text_surface, text_rect)
 
 
-    def handle_event(self, event, is_tool_bomb=True):
+    def handle_event(self, event, is_tool_bomb=True, mine_matrix=None, row=None, col=None, board_height=None, board_width=None):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 if is_tool_bomb and not self.is_land_flagged:
                     if self.is_bomb:
                         self.current_image = self.image_bomb
-                        # Add a gamer over state chacker here
                         self.clicked = True
+                        return "game_over"  # Return game over state
                     else:
-                        self.display_number = True
-                        self.clicked = True
+                        # Check if this cell should trigger flood fill
+                        if mine_matrix is not None and row is not None and col is not None:
+                            if not self.text or self.text == '':
+                                # This is an empty cell, trigger flood fill
+                                self.flood_fill(mine_matrix, row, col, board_height, board_width)
+                            else:
+                                # This cell has a number, just reveal it
+                                self.display_number = True
+                                self.clicked = True
+                        else:
+                            # Fallback to original behavior
+                            self.display_number = True
+                            self.clicked = True
+                        return "continue"  # Game continues
                 else:
                     if self.is_land_flagged and not is_tool_bomb:
                         self.current_image = self.image_normal
@@ -70,8 +82,8 @@ class Button:
                         self.current_image = self.image_flag
                         self.is_land_flagged = True
                         self.clicked = True
-                return True
-        return False
+                    return "continue"
+        return "no_action"
 
     # getter functions
     def get_bomb(self):
@@ -102,6 +114,43 @@ class Button:
                 self.text_color = "Yellow"
             case _:
                 self.text_color = (204, 0, 204) # Dark Pink
+
+    def reveal_cell(self):
+        """Reveals this cell by setting display_number to True"""
+        if not self.is_land_flagged and not self.clicked:
+            self.display_number = True
+            self.clicked = True
+            return True
+        return False
+
+    def flood_fill(self, mine_matrix, row, col, board_height, board_width):
+        """Flood fill algorithm to reveal adjacent empty cells"""
+        # Check bounds
+        if row < 0 or row >= board_height or col < 0 or col >= board_width:
+            return
+        
+        current_cell = mine_matrix[row][col]
+        
+        # Don't reveal if it's a bomb, flagged, or already revealed
+        if current_cell.is_bomb or current_cell.is_land_flagged or current_cell.display_number:
+            return
+        
+        # Reveal this cell
+        current_cell.reveal_cell()
+        
+        # If this cell has a number (adjacent bombs), don't continue flood fill
+        if current_cell.text and current_cell.text != '':
+            return
+        
+        # Recursively reveal all 8 adjacent cells
+        for r_offset in range(-1, 2):
+            for c_offset in range(-1, 2):
+                if r_offset == 0 and c_offset == 0:
+                    continue
+                
+                new_row = row + r_offset
+                new_col = col + c_offset
+                self.flood_fill(mine_matrix, new_row, new_col, board_height, board_width)
 
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
