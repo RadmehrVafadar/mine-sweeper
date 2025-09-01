@@ -2,17 +2,24 @@
 
 A classic Minesweeper game implementation built with Python and pygame.
 
+## Demo
+
+![Minesweeper Demo](demo.gif)
+
 ## Description
 
-This is a fully functional Minesweeper game featuring a 16x16 grid with 40 randomly placed mines. Players can reveal cells to find numbers indicating adjacent mines, or flag cells they suspect contain mines. The game includes hover effects, color-coded numbers, and intuitive tool switching.
+This is a fully functional Minesweeper game featuring a 16x16 grid with 40 randomly placed mines. Players can reveal cells to find numbers indicating adjacent mines, or flag cells they suspect contain mines. The game includes hover effects, color-coded numbers, intuitive tool switching, flood-fill revealing, and complete win/lose functionality.
 
 ## Features
 
 - **16x16 Game Board**: Classic minesweeper grid size with 40 mines
 - **Dual Tool System**: Switch between mine detection and flag placement tools
+- **Flood Fill Algorithm**: Automatically reveals connected empty areas when clicking empty cells
+- **Game Over & Win Detection**: Complete game state management with proper win/lose conditions
 - **Visual Feedback**: Hover effects and color-coded number display
 - **Interactive Gameplay**: Left-click to reveal cells, switch tools to flag suspicious areas
 - **Color-Coded Numbers**: Each number (1-8) has a unique color to indicate the number of adjacent mines
+- **Restart Functionality**: Press 'R' to restart the game after winning or losing
 - **Custom Sprites**: Beautiful custom artwork for different cell states
 
 ## Screenshots
@@ -74,6 +81,7 @@ python main.py
 
 - **Left Click**: Reveal cell (bomb tool) or place/remove flag (flag tool)
 - **Tool Button**: Click to switch between bomb detection and flag placement
+- **R Key**: Restart the game after game over or winning
 - **Window Close**: Click the X button to exit
 
 ## Project Structure
@@ -102,11 +110,17 @@ mine-sweeper/
 - ✅ Visual feedback and hover effects
 - ✅ Color-coded numbers
 - ✅ Flag placement/removal
+- ✅ Flood fill for revealing connected empty areas
+- ✅ Game over detection and restart functionality
+- ✅ Win condition detection
+- ✅ Complete game state management
 
-### Planned Features (see todo.txt)
+### Potential Future Enhancements
 - 🔄 Center the game board in the window
-- 🔄 Implement flood fill for revealing connected empty areas
-- 🔄 Add game over detection and restart functionality
+- 🔄 Add difficulty levels (different grid sizes/mine counts)
+- 🔄 Add timer and score tracking
+- 🔄 Add sound effects
+- 🔄 Add animations
 
 ## Technical Details
 
